@@ -1,0 +1,48 @@
+metadata:
+  name: boa-app-whitelist
+  namespace: boa-app
+  labels: {}
+  annotations: {}
+  description: ""
+  disable: false
+spec:
+  algo: FIRST_MATCH
+  any_server: {}
+  rules:
+    - kind: service_policy_rule
+      uid: 673aad21-3210-41e1-88d8-38f8032746d1
+      tenant: f5-apac-sp-yhsgmcye
+      namespace: boa-app
+      name: ves-io-service-policy-boa-app-whitelist-only-allow-boa-web
+  rule_list:
+    rules:
+      - metadata:
+          name: only-allow-boa-web
+          description: Whitelist boa-web namespace
+          disable: false
+        spec:
+          action: ALLOW
+          client_selector:
+            expressions:
+              - name.ves.io/namespace in (boa-app, boa-web)
+          label_matcher:
+            keys: []
+          headers: []
+          query_params: []
+          http_method:
+            methods:
+              - ANY
+            invert_matcher: false
+          any_ip: {}
+          any_asn: {}
+          expiration_timestamp: null
+          arg_matchers: []
+          cookie_matchers: []
+          waf_action:
+            none: {}
+          rate_limiter: []
+          forwarding_class: []
+          scheme: []
+          challenge_action: DEFAULT_CHALLENGE
+          goto_policy: []
+  simple_rules: []

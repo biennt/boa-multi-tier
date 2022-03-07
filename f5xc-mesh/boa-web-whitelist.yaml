@@ -1,0 +1,77 @@
+metadata:
+  name: boa-web-whitelist
+  namespace: boa-web
+  labels: {}
+  annotations: {}
+  description: ""
+  disable: false
+spec:
+  algo: FIRST_MATCH
+  any_server: {}
+  rules:
+    - kind: service_policy_rule
+      uid: 8d4b61f6-870f-411d-a3f1-0e8c10c7cdc5
+      tenant: f5-apac-sp-yhsgmcye
+      namespace: boa-web
+      name: ves-io-service-policy-boa-web-whitelist-only-from-public-fqdn
+    - kind: service_policy_rule
+      uid: 8a25438a-a856-4960-a75f-6486029d8cd3
+      tenant: f5-apac-sp-yhsgmcye
+      namespace: boa-web
+      name: ves-io-service-policy-boa-web-whitelist-allow-it-own-namespace
+  rule_list:
+    rules:
+      - metadata:
+          name: only-from-public-fqdn
+          description: Namespace isolated from others
+          disable: false
+        spec:
+          action: ALLOW
+          any_client: {}
+          label_matcher:
+            keys: []
+          headers: []
+          query_params: []
+          any_ip: {}
+          any_asn: {}
+          expiration_timestamp: null
+          arg_matchers: []
+          cookie_matchers: []
+          waf_action:
+            none: {}
+          domain_matcher:
+            exact_values:
+              - bov.volt.foobz.com.au
+            regex_values: []
+            transformers: []
+          rate_limiter: []
+          forwarding_class: []
+          scheme: []
+          challenge_action: DEFAULT_CHALLENGE
+          goto_policy: []
+      - metadata:
+          name: allow-it-own-namespace
+          description: Whitelist own namespace due to loadgen
+          disable: false
+        spec:
+          action: ALLOW
+          client_selector:
+            expressions:
+              - name.ves.io/namespace in (boa-web)
+          label_matcher:
+            keys: []
+          headers: []
+          query_params: []
+          any_ip: {}
+          any_asn: {}
+          expiration_timestamp: null
+          arg_matchers: []
+          cookie_matchers: []
+          waf_action:
+            none: {}
+          rate_limiter: []
+          forwarding_class: []
+          scheme: []
+          challenge_action: DEFAULT_CHALLENGE
+          goto_policy: []
+  simple_rules: []

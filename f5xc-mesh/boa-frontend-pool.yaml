@@ -1,0 +1,27 @@
+metadata:
+  name: boa-frontend-pool
+  namespace: boa-web
+  labels: {}
+  annotations: {}
+  description: ""
+  disable: false
+spec:
+  origin_servers:
+    - k8s_service:
+        service_name: frontend.boa-web
+        site_locator:
+          site:
+            tenant: f5-apac-sp-yhsgmcye
+            namespace: system
+            name: foobz-voltstack1
+        outside_network: {}
+      labels: {}
+  no_tls: {}
+  port: 80
+  same_as_endpoint_port: {}
+  healthcheck:
+    - tenant: f5-apac-sp-yhsgmcye
+      namespace: boa-web
+      name: health-check-http
+  loadbalancer_algorithm: LB_OVERRIDE
+  endpoint_selection: LOCAL_PREFERRED

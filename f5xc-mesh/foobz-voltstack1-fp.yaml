@@ -1,0 +1,88 @@
+metadata:
+  name: foobz-voltstack1-fp
+  namespace: shared
+  labels: {}
+  annotations: {}
+  description: ""
+  disable: false
+spec:
+  drp_http_connect: {}
+  rule_list:
+    rules:
+      - metadata:
+          name: boa-web-ns-https
+          description: Whitelist URL for boa-web,boa-app,boa-db
+          disable: false
+        rule_name: ""
+        rule_description: ""
+        action: ALLOW
+        label_selector:
+          expressions:
+            - name.ves.io/namespace in (boa-web, boa-db, boa-app)
+        tls_list:
+          tls_list:
+            - suffix_value: f5.com
+            - suffix_value: google.com
+            - suffix_value: volterra.io
+            - suffix_value: alpinelinux.org
+            - suffix_value: ubuntu.com
+        no_http_connect_port: {}
+      - metadata:
+          name: boa-web-ns-http
+          description: Whitelist URL for boa-web,boa-app,boa-db
+          disable: false
+        rule_name: ""
+        rule_description: ""
+        action: ALLOW
+        label_selector:
+          expressions:
+            - name.ves.io/namespace in (boa-web, boa-app, boa-db)
+        http_list:
+          http_list:
+            - suffix_value: volterra.io
+              any_path: {}
+            - suffix_value: google.com
+              any_path: {}
+            - suffix_value: f5.com
+              any_path: {}
+        no_http_connect_port: {}
+      - metadata:
+          name: boa-app-syslog
+          description: Allow boa-app talk to syslog server
+          disable: false
+        rule_name: ""
+        rule_description: ""
+        action: ALLOW
+        label_selector:
+          expressions:
+            - name.ves.io/namespace in (boa-app)
+        dst_prefix_list:
+          prefixes:
+            - 10.176.10.122/32
+        no_http_connect_port: {}
+      - metadata:
+          name: boa-db-backup
+          description: Allow boa-db talk to backup server
+          disable: false
+        rule_name: ""
+        rule_description: ""
+        action: ALLOW
+        label_selector:
+          expressions:
+            - name.ves.io/namespace in (boa-db)
+        dst_prefix_list:
+          prefixes:
+            - 10.176.10.20/32
+        no_http_connect_port: {}
+      - metadata:
+          name: allow-others-ns
+          description: Whitelist URL for other namespaces
+          disable: false
+        rule_name: ""
+        rule_description: ""
+        action: ALLOW
+        label_selector:
+          expressions:
+            - name.ves.io/namespace notin (boa-web, boa-db, boa-app)
+        all_destinations: {}
+        no_http_connect_port: {}
